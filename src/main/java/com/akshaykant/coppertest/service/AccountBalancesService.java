@@ -21,11 +21,13 @@ import java.util.concurrent.ExecutionException;
 public class AccountBalancesService {
 
     private final AuthService authService;
+    private final UserBalanceService userBalanceService;
 
     private String accessToken;
 
-    public AccountBalancesService(AuthService authService) {
+    public AccountBalancesService(AuthService authService, UserBalanceService userBalanceService) {
         this.authService = authService;
+        this.userBalanceService = userBalanceService;
     }
 
     public List<AssetBalance> getUserBalances(String clientID, String clientSecret) throws IOException, ExecutionException, InterruptedException {
@@ -41,7 +43,10 @@ public class AccountBalancesService {
         if (accessToken != null){
             assetBalancesList = getUserAssetBalances(clientID, clientSecret);
 
-            // TODO Call the Repository to add it to the database with clientID and list of their asset balances
+            if (assetBalancesList.size() != 0) {
+                // Call the Repository to add it to the database with clientID and list of their asset balances
+                //userBalanceService.saveUserBalance(clientID, assetBalancesList);
+            }
         }
 
         return assetBalancesList;
