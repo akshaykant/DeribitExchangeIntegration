@@ -32,6 +32,33 @@ Transfer from exchange to external crypto address.
 
 https://documenter.getpostman.com/view/240605/TzmChYhT
 
-# Running the Service
+# Instructions to Run the Service
 
 Run the shell script for single click building and deployment of service. Use cURL command from [documentation](https://documenter.getpostman.com/view/240605/TzmChYhT) to run test the APIs.
+
+```
+./build.sh
+
+# User Asset Balance API
+curl --location --request GET 'http://localhost:8080/exchanges/v1/account/balances?client_id=TIYIapc7' \
+--header 'client_secret: 4_eoDpo_BfSh7Bdg1-BsfOHQqka_hOXnOI_S8YquERc'
+
+# User Deposit History
+curl --location --request GET 'http://localhost:8080/exchanges/v1/account/history/deposits?count=10&client_id=TIYIapc7&offset=0' \
+--header 'client_secret: 4_eoDpo_BfSh7Bdg1-BsfOHQqka_hOXnOI_S8YquERc'
+
+# User Withdrawal History
+curl --location --request GET 'http://localhost:8080/exchanges/v1/account/history/withdrawals?count=10&client_id=TIYIapc7&offset=0' \
+--header 'client_secret: 4_eoDpo_BfSh7Bdg1-BsfOHQqka_hOXnOI_S8YquERc'
+
+# Transfer asset to sub account
+curl --location --request GET 'http://localhost:8080/exchanges/v1/account/transfer/sub_account?client_id=TIYIapc7&amount=2&currency=BTC&destination_sub_account=31364' \
+--header 'client_secret: 4_eoDpo_BfSh7Bdg1-BsfOHQqka_hOXnOI_S8YquERc'
+
+# Transfer asset to external account
+curl --location --request GET 'http://localhost:8080/exchanges/v1/account/transfer/external_account?client_id=TIYIapc7&amount=2&currency=BTC&destination_external_account=2NBqqD5GRJ8wHy1PYyCXTe9ke5226FhavBz' \
+--header 'client_secret: 4_eoDpo_BfSh7Bdg1-BsfOHQqka_hOXnOI_S8YquERc'
+
+```
+
+Replace with Deribit exchange user's [credentials](https://test.deribit.com/) like `client_id` and `client_secret` to use your Deribit exchange. 

@@ -1,5 +1,7 @@
 mvn -DskipTests=true  package
 
+docker stop /usertradeservice
+
 docker rm /usertradeservice
 
 docker image build -t usertradeservice .
