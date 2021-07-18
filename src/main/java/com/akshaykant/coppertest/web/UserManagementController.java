@@ -2,11 +2,11 @@ package com.akshaykant.coppertest.web;
 
 import com.akshaykant.coppertest.common.domain.AssetDeposit;
 import com.akshaykant.coppertest.common.domain.AssetWithdrawals;
+import com.akshaykant.coppertest.common.resources.CurrencyCode;
 import com.akshaykant.coppertest.service.AccountBalancesService;
 import com.akshaykant.coppertest.service.AccountHistoryDepositsAndWithdrawalsService;
-import com.akshaykant.coppertest.web.resource.AccountBalancesResponse;
-import com.akshaykant.coppertest.web.resource.DepositResponse;
-import com.akshaykant.coppertest.web.resource.WithdrawalResponse;
+import com.akshaykant.coppertest.service.TransferService;
+import com.akshaykant.coppertest.web.resource.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +23,12 @@ public class UserManagementController extends BaseController {
 
     private final AccountBalancesService accountBalancesService;
     private final AccountHistoryDepositsAndWithdrawalsService accountHistoryDepositsAndWithdrawalsService;
+    private final TransferService transferService;
 
-
-    public UserManagementController(AccountBalancesService accountBalancesService, AccountHistoryDepositsAndWithdrawalsService accountHistoryDepositsAndWithdrawalsService) {
+    public UserManagementController(AccountBalancesService accountBalancesService, AccountHistoryDepositsAndWithdrawalsService accountHistoryDepositsAndWithdrawalsService, TransferService transferService) {
         this.accountBalancesService = accountBalancesService;
         this.accountHistoryDepositsAndWithdrawalsService = accountHistoryDepositsAndWithdrawalsService;
+        this.transferService = transferService;
     }
 
     @GetMapping(value = "/account/balances")
@@ -98,6 +99,48 @@ public class UserManagementController extends BaseController {
         log.info("UserManagementController -> AccountHistoryDepositsAndWithdrawalsService ");
 
         return ResponseEntity.status(HttpStatus.OK).body(new WithdrawalResponse(clientID, userWithdrawHistory));
+    }
+
+    @GetMapping(value = "/account/transfer/external_account")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<TransferToExternalAccountResponse> initiateTransferToExternalAccount(
+            @RequestHeader(value = "client_secret") String clientSecret,
+            @RequestParam(value = "client_id") String clientID,
+            @RequestParam(value = "amount") double amount,
+            @RequestParam(value = "currency") CurrencyCode currency,
+            @RequestParam(value = "destination_external_account") String destinationExternalAccount) throws Exception {
+
+
+        log.info("Client ID " + clientID + "Client Secret " + clientSecret);
+
+        // call the service
+        var transferToExternalAccount = transferService.initiateTransferToExternalAccount(clientID, clientSecret, amount, currency.toString(), destinationExternalAccount);
+
+        log.info("UserManagementController -> TransferService ");
+
+        return ResponseEntity.status(HttpStatus.OK).body(new TransferToExternalAccountResponse(clientID, transferToExternalAccount));
+
+    }
+
+    @GetMapping(value = "/account/transfer/sub_account")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<TransferToSubAccountResponse> initiateTransferToSubAccount(
+            @RequestHeader(value = "client_secret") String clientSecret,
+            @RequestParam(value = "client_id") String clientID,
+            @RequestParam(value = "amount") double amount,
+            @RequestParam(value = "currency") CurrencyCode currency,
+            @RequestParam(value = "destination_sub_account") int destinationSubAccount) throws Exception {
+
+
+        log.info("Client ID " + clientID + "Client Secret " + clientSecret);
+
+        // call the service
+        var transferToSubAccount = transferService.initiateTransferToSubAccount(clientID, clientSecret, amount, currency.toString(), destinationSubAccount);
+
+        log.info("UserManagementController -> TransferService ");
+
+        return ResponseEntity.status(HttpStatus.OK).body(new TransferToSubAccountResponse(clientID, transferToSubAccount));
+
     }
 }
 

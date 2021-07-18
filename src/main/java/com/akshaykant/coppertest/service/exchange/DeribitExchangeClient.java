@@ -1,9 +1,6 @@
 package com.akshaykant.coppertest.service.exchange;
 
-import com.akshaykant.coppertest.service.model.AccountSummaryResponse;
-import com.akshaykant.coppertest.service.model.AuthResponse;
-import com.akshaykant.coppertest.service.model.DepositResponse;
-import com.akshaykant.coppertest.service.model.WithdrawalsResponse;
+import com.akshaykant.coppertest.service.model.*;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -38,5 +35,21 @@ public interface DeribitExchangeClient {
                                                                  @Query("currency") String currency,
                                                                  @Query("offset") int offset);
 
+
+    @GET("private/withdrawal")
+    @Headers("accept: application/json")
+    CompletableFuture<WithdrawResponse> initiateWithdrawal(@Header("Authorization") String header,
+                                                           @Query("currency") String currency,
+                                                           @Query("address") String address,
+                                                           @Query("amount") double amount,
+                                                           @Query("priority") String priority,
+                                                           @Query("tfa") String tfa);
+
+    @GET("private/submit_transfer_to_subaccount")
+    @Headers("accept: application/json")
+    CompletableFuture<TransferToSubAccountResponse> initiateTransferToSubAccount(@Header("Authorization") String header,
+                                                                                 @Query("currency") String currency,
+                                                                                 @Query("amount") double amount,
+                                                                                 @Query("destination") int destination);
 
 }

@@ -3,6 +3,7 @@ package com.akshaykant.coppertest.service;
 import com.akshaykant.coppertest.common.domain.AssetDeposit;
 import com.akshaykant.coppertest.common.domain.AssetWithdrawals;
 import com.akshaykant.coppertest.common.resources.CurrencyCode;
+import com.akshaykant.coppertest.common.resources.WebConstants;
 import com.akshaykant.coppertest.service.exchange.DeribitExchangeClient;
 import com.akshaykant.coppertest.service.model.DepositResponse;
 import com.akshaykant.coppertest.service.model.DepositResponseCurrency;
@@ -57,7 +58,7 @@ public class AccountHistoryDepositsAndWithdrawalsService {
         log.info("AccountHistoryDepositsAndWithdrawals : Count " + count + " Offset " + offset);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://test.deribit.com/api/v2/")
+                .baseUrl(WebConstants.API_PATH_PREFIX)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -133,7 +134,7 @@ public class AccountHistoryDepositsAndWithdrawalsService {
         log.info("AccountHistoryDepositsAndWithdrawals : Count " + count + " Offset " + offset);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://test.deribit.com/api/v2/")
+                .baseUrl(WebConstants.API_PATH_PREFIX)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
